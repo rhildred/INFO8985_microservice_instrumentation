@@ -1,5 +1,5 @@
-# k3d-helm
-run kubernetes cluster in codespace
+# INFO8985 Microservice instrumentation
+run kubernetes cluster with signoz and log, trace and meter to it from knative func
 
 TLDR;
 
@@ -9,26 +9,32 @@ ansible-playbook playbook.yml
 
 ```
 
-I did struggle with actually seeing the service outside of the dev container. If the service port is 80 and you want to access on 8080, you can run:
+Run `kubectl get pods` to see that the pods are all running or completed. Then you need to forward the ports:
 
 ```bash
-nohup kubectl port-forward svc/< what you named service > 8080:80  2>&1 &
+nohup kubectl port-forward svc/my-signoz-frontend 3301:3301  2>&1 &
+nohup kubectl port-forward svc/my-signoz-otel-collector 4317:4317  2>&1 &
 ```
 
-This repo makes a persistent volume from the storage folder. Consume it like this:
+You can run app.py to see your metrics, logs and traces in signoz. 
 
-```yml
-# Additional volumes on the output Deployment definition.
-volumes: [ { "name": "my-volume", "persistentVolumeClaim": { "claimName": "my-pvc" }}]
-
-# Additional volumeMounts on the output Deployment definition.
-volumeMounts: [ { "mountPath": "/usr/share/nginx/html", "name": "my-volume" }]
+```bash
+export OTEL_PYTHON_LOGGING_AUTO_INSTRUMENTATION_ENABLED=true
+opentelemetry-instrument --logs_exporter otlp flask run -p 8080
 ```
 
-To delete a cluster (and start over):
+All of the apps are reachable in your browser from the globe on the ports tab.
+
+To delete the cluster (and start over):
 
 ```bash
 k3d cluster delete local-k8s
 ```
 
-Use this as a template and then add helm charts to the playbook.yml as required.
+Use this as a template and:
+
+1. use [this article](https://knative.dev/docs/functions/install-func/) to install func. and create a python hello world.
+2. use the example in app.py to instrument the code created with func
+3. deploy the function on the cluster
+
+Next week we will have a chance to understand the logging in signoz.
