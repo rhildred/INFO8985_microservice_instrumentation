@@ -38,3 +38,6 @@ def roll_dice():
 
 def roll():
     return randint(1, 6)
+
+if __name__ == '__main__':
+    app.run()
