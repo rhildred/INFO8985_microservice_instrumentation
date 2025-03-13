@@ -19,8 +19,7 @@ nohup kubectl port-forward svc/my-signoz-otel-collector 4317:4317  2>&1 &
 You can run app.py to see your metrics, logs and traces in signoz. 
 
 ```bash
-export OTEL_PYTHON_LOGGING_AUTO_INSTRUMENTATION_ENABLED=true
-opentelemetry-instrument --logs_exporter otlp flask run -p 8080
+OTEL_PYTHON_LOGGING_AUTO_INSTRUMENTATION_ENABLED=true OTEL_EXPORTER_OTLP_ENDPOINT=localhost:4317 opentelemetry-instrument --traces_exporter otlp --metrics_exporter otlp --logs_exporter otlp python app.py
 ```
 
 All of the apps are reachable in your browser from the globe on the ports tab.
