@@ -37,7 +37,17 @@ def roll_dice():
         return result
 
 def roll():
-    return randint(1, 6)
+    roll = randint(1, 7)
+    try:
+        if roll < 1 or roll > 6:
+            raise ValueError
+    except ValueError as exc:
+        span = trace.get_current_span()
+        # Record the exception and update the span status.
+        span.record_exception(exc)
+        span.set_status(trace.Status(trace.StatusCode.ERROR, str(exc)))
+        raise
+    return roll
 
 if __name__ == '__main__':
     app.run()

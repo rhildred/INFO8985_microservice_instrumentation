@@ -1,9 +1,12 @@
----
-- hosts: localhost
+- name: down signoz
+  ansible.builtin.import_playbook: signoz/down.yaml
+- name: stop cluster
+  hosts: localhost
+  gather_facts: false  
   tasks:
-  - name: stop cluster
-    ansible.builtin.shell: k3d cluster delete local-k8s
-  - name: delete .kube folder
-    ansible.builtin.file:
-      path: ~/.kube
-      state: absent
+    - name: stop cluster
+      ansible.builtin.shell: k3d cluster delete local-k8s
+    - name: delete .kube folder
+      ansible.builtin.file:
+        path: ~/.kube
+        state: absent
