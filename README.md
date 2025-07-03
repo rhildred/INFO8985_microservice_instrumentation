@@ -4,7 +4,7 @@ run kubernetes cluster with signoz and log, trace and meter to it from knative f
 TLDR;
 
 ```bash
-pip install -r requirements.txt
+pip install ansible kubernetes
 ansible-playbook up.yml
 
 ```
