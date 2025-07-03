@@ -1,5 +1,5 @@
 ---
-- hosts: all
+- hosts: localhost
   tasks:
   - name: download k3d
     ansible.builtin.command: curl https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh -o /tmp/installk3d.sh
@@ -31,13 +31,9 @@
     args:
       creates: /usr/local/bin/kubectl
   - name: create cluster
-    ansible.builtin.command: k3d cluster create local-k8s --volume '{{ lookup('ansible.builtin.env', 'PWD') }}'/storage:/var/storage
+    ansible.builtin.command: k3d cluster create local-k8s
     args:
       creates: ~/.kube/config
-  - name: create persistent volume
-    kubernetes.core.k8s:
-      state: present
-      src: ./kube/persistent.yaml
   - name: Add signoz chart repo
     kubernetes.core.helm_repository:
       name: signoz

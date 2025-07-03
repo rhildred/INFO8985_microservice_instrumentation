@@ -5,7 +5,7 @@ TLDR;
 
 ```bash
 pip install -r requirements.txt
-ansible-playbook playbook.yml
+ansible-playbook up.yml
 
 ```
 
@@ -27,13 +27,11 @@ All of the apps are reachable in your browser from the globe on the ports tab.
 To delete the cluster (and start over):
 
 ```bash
-k3d cluster delete local-k8s
+ansible-playbook down.yml
 ```
 
 Use this as a template and:
 
-1. use [this article](https://knative.dev/docs/functions/install-func/) to install func. and create a python hello world.
-2. use the example in app.py to instrument the code created with func
-3. deploy the function on the cluster
+1. deploy app.py on the cluster
 
 Next week we will have a chance to understand the logging in signoz.
