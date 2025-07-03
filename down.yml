@@ -1,5 +1,3 @@
-- name: down signoz
-  ansible.builtin.import_playbook: signoz/down.yaml
 - name: stop cluster
   hosts: localhost
   gather_facts: false  
